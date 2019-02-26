@@ -1,34 +1,26 @@
-## Index file modifications
+##index 3
 
-I have created two variables, scenarios and correctResponse (lines 166, 167)
+Need to create the arrays needed for the 3 phases of the experiment. 
 
-'''
-var scenarios = ["HRN_32","HRN_25"];
+1) I  created the following category arrays:
+    var NotCP_scenarios
+    var Prob_scenarios
+    var HRN_scenarios
+    var ROSH_scenarios
+    var iROSH_scenarios
     
-var correctResponse = [2,0];
-'''
-
-where correctResponse represents the correct button press position (e.g.,2 would be category_button_HRN
-
-
-the feedback trial (from line 179) uses a conditional statement; if the position  of the last click is the same as the position 
-we specified for correct response (e.g., 2)show image representing last chosen category, and the green tick.
-otherwise, show image representing last chosen category, and the RED CROSS.
-
-
-## index2.html
-
-I have tried creating an accumulating variable, i, to give the code more flexibility.
-with every new block, I want the variable i to increase by one, so that in testTrial,
-the first block displays scenarios[0] as stimulus, the second block displays scenarios[1], the third scenarios [2],
-and so on.
-similarly, with each new block, I want a different correct response to be considered
-so that the correct button position to press in first block is 2, second block is 0, and so on
-
-
-it's currently working for testFeedback (i.e., program will give you the green tick if you click
-on position no. 2 for first block, position 0 for second block, position 1 for third, and position 3 for fourth,
-as specified in var correctResponse.
-
-However it's not working for testTrial, which means that instead of a new scenario being displayed each time
-(i.e., scenarios[i+1]), it's staying at scenarios[i] where i=0 for every block.
+2) I then shuffled each of these
+     var Shuffled_NotCP_Scenarios = jsPsych.randomization.shuffleNoRepeats(NotCP_scenarios);
+     var Shuffled_Prob_Scenarios = jsPsych.randomization.shuffleNoRepeats(Prob_scenarios);
+     var Shuffled_HRN_Scenarios = jsPsych.randomization.shuffleNoRepeats(HRN_scenarios);
+     var Shuffled_ROSH_Scenarios = jsPsych.randomization.shuffleNoRepeats(ROSH_scenarios);
+     var Shuffled_iROSH_Scenarios = jsPsych.randomization.shuffleNoRepeats(iROSH_scenarios);
+     
+ 3) Then Create an Array for each phase (perhaps also create CSV files of each of these arrays?). This is the section that I am unsure of how to go about. i think I have the logic, but having issues actually coding it. i.e. 
+    
+        Pre-test phase: create an array ("PreTest_Array") by selecting objects 0 & 1 from EACH of the shuffled arrays
+        
+        Training phase: create an array ("Training_Array") by selecting objects 2-5 from EACH of the Shuffled arrays
+        
+        Post-test phase: creating this one is more complex and involves a few steps. First - we need to make a new array called "PostTest_Trained" by randomly selecting 2 objects per category  from the "Training_Array" . Not sure the best way to do this but it may be useful to use a filter function (e.g. jsObject.filter(obj=>{return obj.correct_response ===2}). Then we need to create an array called "PostTest_New" by creating an array  by selecting objects 7 & 8 from EACH of the Shuffled arrays. The create a combined array called "PostTest_combined" where each of the obects are recorded as either trained or new.
+        
