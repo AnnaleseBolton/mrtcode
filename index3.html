@@ -195,6 +195,14 @@
 
  var Shuffled_iROSH_Scenarios = jsPsych.randomization.shuffleNoRepeats(iROSH_scenarios);
 
+// My attempt at creating a pretest array
+
+var short_Pretest_NotCP = Shuffled_NotCP_Scenarios.slice(0,7);
+var short_Pretest_Prob = Shuffled_Prob_Scenarios.slice(0,7);
+var short_Pretest_HRN = Shuffled_HRN_Scenarios.slice(0,7);
+var short_Pretest_ROSH = Shuffled_ROSH_Scenarios.slice(0,7);
+var short_Pretest_iROSH = Shuffled_iROSH_Scenarios.slice(0,7);
+var PreTest_array = console.log(short_Pretest_NotCP.concat(short_Pretest_Prob, short_Pretest_HRN,short_Pretest_ROSH,short_Pretest_iROSH));
 
 
  var expert_feedback = [
