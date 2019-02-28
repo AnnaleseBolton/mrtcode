@@ -22,6 +22,7 @@
     var timeline=[];
     var introloop=[];
     var turkcode = (Math.floor(Math.random() * 899999) + 100000).toString();
+    // check whether this allows for duplicates
 	  var images = [
 		  './img/test1.jpg',
 		  './img/test2.jpg',
@@ -195,63 +196,61 @@
 
  var Shuffled_iROSH_Scenarios = jsPsych.randomization.shuffleNoRepeats(iROSH_scenarios);
 
-// My attempt at creating a pretest array
+// Pretest array
 
-var short_Pretest_NotCP = Shuffled_NotCP_Scenarios.slice(0,7);
-var short_Pretest_Prob = Shuffled_Prob_Scenarios.slice(0,7);
-var short_Pretest_HRN = Shuffled_HRN_Scenarios.slice(0,7);
-var short_Pretest_ROSH = Shuffled_ROSH_Scenarios.slice(0,7);
-var short_Pretest_iROSH = Shuffled_iROSH_Scenarios.slice(0,7);
-var PreTest_array = console.log(short_Pretest_NotCP.concat(short_Pretest_Prob, short_Pretest_HRN,short_Pretest_ROSH,short_Pretest_iROSH));
+var short_Pretest_NotCP = Shuffled_NotCP_Scenarios.slice(0,2);
+var short_Pretest_Prob = Shuffled_Prob_Scenarios.slice(0,2);
+var short_Pretest_HRN = Shuffled_HRN_Scenarios.slice(0,2);
+var short_Pretest_ROSH = Shuffled_ROSH_Scenarios.slice(0,2);
+var short_Pretest_iROSH = Shuffled_iROSH_Scenarios.slice(0,2);
+var PreTest_array = short_Pretest_NotCP.concat(short_Pretest_Prob, short_Pretest_HRN,short_Pretest_ROSH,short_Pretest_iROSH);
+//var PreTest_array = [short_Pretest_NotCP, short_Pretest_Prob, short_Pretest_HRN, short_Pretest_ROSH, short_Pretest_iROSH];
+//console.log(short_Pretest_NotCP.concat(short_Pretest_Prob, short_Pretest_HRN,short_Pretest_ROSH,short_Pretest_iROSH));
+
+// Training Arrary
+var short_Train_NotCP = Shuffled_NotCP_Scenarios.slice(2,7);
+var short_Train_Prob = Shuffled_Prob_Scenarios.slice(2,7);
+var short_Train_HRN = Shuffled_HRN_Scenarios.slice(2,7);
+var short_Train_ROSH = Shuffled_ROSH_Scenarios.slice(2,7);
+var short_Train_iROSH = Shuffled_iROSH_Scenarios.slice(2,7);
+var Train_array = short_Train_NotCP.concat(short_Train_Prob, short_Train_HRN,short_Train_ROSH,short_Train_iROSH);
+
+// Post-Test New Arrary
+var short_Posttest_NotCP = Shuffled_NotCP_Scenarios.slice(2,7);
+var short_Posttest_Prob = Shuffled_Prob_Scenarios.slice(2,7);
+var short_Posttest_HRN = Shuffled_HRN_Scenarios.slice(2,7);
+var short_Posttest_ROSH = Shuffled_ROSH_Scenarios.slice(2,7);
+var short_Posttest_iROSH = Shuffled_iROSH_Scenarios.slice(2,7);
+var Posttest_New_array = short_Posttest_NotCP.concat(short_Posttest_Prob, short_Posttest_HRN,short_Posttest_ROSH,short_Posttest_iROSH);
+
+// My attempt at Post-test Trained Arrary
 
 
- var expert_feedback = [
-   'NotCP_10b_feedback.jpg',
-   'NotCP_56d_feedback.jpg',
-   'NotCP_72c_feedback.jpg',
-   'NotCP_112d_feedback.jpg',
-   'NotCP_117b_feedback.jpg',
-   'NotCP_120e_feedback.jpg',
-   'NotCP_132d_feedback.jpg',
-   'NotCP_141d_feedback.jpg',
-   'NotCP_145c_feedback.jpg',
-   'Prob_23d_feedback.jpg',
-   'Prob_41a_feedback.jpg',
-   'Prob_70e_feedback.jpg',
-   'Prob_72b_feedback.jpg',
-   'Prob_75_feedback.jpg',
-   'Prob_78_feedback.jpg',
-   'Prob_80a_feedback.jpg',
-   'Prob_91b_feedback.jpg',
-   'Prob_106b_feedback.jpg',
-   'HRN_23b_feedback.jpg',
-   'HRN_25_feedback.jpg',
-   'HRN_32_feedback.jpg',
-   'HRN_54a_feedback.jpg',
-   'HRN_59a_feedback.jpg',
-   'HRN_61b_feedback.jpg',
-   'HRN_66a_feedback.jpg',
-   'HRN_96a_feedback.jpg',
-   'HRN_100_feedback.jpg',
-   'ROSH_11_feedback.jpg',
-   'ROSH_30a_feedback.jpg',
-   'ROSH_42a_feedback.jpg',
-   'ROSH_48_feedback.jpg',
-   'ROSH_68b_feedback.jpg',
-   'ROSH_90a_feedback.jpg',
-   'ROSH_103a_feedback.jpg',
-   'ROSH_123_feedback.jpg',
-   'ROSH_140_feedback.jpg',
-   'iROSH_17b_feedback.jpg',
-   'iROSH_24b_feedback.jpg',
-   'iROSH_37e_feedback.jpg',
-   'iROSH_71a_feedback.jpg',
-   'iROSH_106a_feedback.jpg',
-   'iROSH_108a_feedback.jpg',
-   'iROSH_115_feedback.jpg',
-   'iROSH_116_feedback.jpg',
-   'iROSH_128_feedback.jpg',
- ];
+
+
+// Assign participant id's and condition
+var pid = Math.floor(Math.random() * 100000);
+var condition = ['Basic', 'Expert'];
+var condition = jsPsych.randomization.sampleWithoutReplacement(condition, 1)[0]; // not sure what this does
+jsPsych.data.addProperties({
+        condition: condition
+      });
+
+
+
+/* This code might be helpful for later saving the data
+
+var filename = "pilot_" + pid;
+function saveData(filename, filedata){
+  $.ajax({
+  type:'post',
+  cache: false,
+  url: 'save_data.php', // this is the path to the above PHP script
+  data: {filename: filename, filedata: filedata}
+  });
+};
+*/
+
 
 
     /* function to start the jsPsych experiment */
@@ -382,39 +381,64 @@ var PreTest_array = console.log(short_Pretest_NotCP.concat(short_Pretest_Prob, s
 
     // create category buttons, define variables to use later
     categoryButtons = ["Category_button_NotCP","Category_button_Prob","Category_button_HRN","Category_button_ROSH","Category_button_iROSH"];
-    var scenarios = ["NotCP_10b","Prob_41a","HRN_23b","ROSH_11","iROSH_17b"];
+    //var scenarios = ["NotCP_10b","Prob_41a","HRN_23b","ROSH_11","iROSH_17b"];
     // 32 = psychologist, 25 = midwife
-    var correctResponse = [0,1,2,3,4];
+    //var correctResponse = [0,1,2,3,4];
 
-    var NotCP_scenarios = [
-  {stimulus: "<img src ='img/NotCP_10b.jpg' width=1000px>", data: {correct_response: 0,}, expert_reasoning: "<img src ='img/NotCP_10b_feedback.jpg' width=1000px>", },
-  {stimulus: "<img src ='img/NotCP_56d.jpg' width=1000px>", data: {correct_response: 0,}, expert_reasoning: "<img src ='img/NotCP_56d_feedback.jpg' width=1000px>", },
-  {stimulus: "<img src ='img/NotCP_72c.jpg' width=1000px>", data: {correct_response: 0,}, expert_reasoning: "<img src ='img/NotCP_72c_feedback.jpg' width=1000px>", },
-  {stimulus: "<img src ='img/NotCP_112d.jpg' width=1000px>", data: {correct_response: 0,}, expert_reasoning: "<img src ='img/NotCP_112d_feedback.jpg' width=1000px>", },
-  {stimulus: "<img src ='img/NotCP_117b.jpg' width=1000px>", data: {correct_response: 0,}, expert_reasoning: "<img src ='img/NotCP_117b_feedback.jpg' width=1000px>", },
-  {stimulus: "<img src ='img/NotCP_120e.jpg' width=1000px>", data: {correct_response: 0,}, expert_reasoning: "<img src ='img/NotCP_120e_feedback.jpg' width=1000px>", },
-  {stimulus: "<img src ='img/NotCP_132d.jpg' width=1000px>", data: {correct_response: 0,}, expert_reasoning: "<img src ='img/NotCP_132d_feedback.jpg' width=1000px>", },
-  {stimulus: "<img src ='img/NotCP_141d.jpg' width=1000px>", data: {correct_response: 0,}, expert_reasoning: "<img src ='img/NotCP_141d_feedback.jpg' width=1000px>", },
-  {stimulus: "<img src ='img/NotCP_145c.jpg' width=1000px>", data: {correct_response: 0,}, expert_reasoning: "<img src ='img/NotCP_145c_feedback.jpg' width=1000px>", },
-];
 
-  var Shuffled_NotCP_Scenarios = jsPsych.randomization.shuffleNoRepeats(NotCP_scenarios);
 
-/*
- var PreTest_array = [
-  jsPsych.data.get(Shuffled_NotCP_Scenarios, 0,1)[0],
-  jsPsych.data.get(Shuffled_Prob_Scenarios, 0,1)[0],
-  jsPsych.data.get(Shuffled_HRN_Scenarios, 0,1)[0],
-  jsPsych.data.get(Shuffled_ROSH_Scenarios,0,1)[0],
-  jsPsych.data.get(Shuffled_iROSH_Scenarios, 0,1)[0],
- ];
-
-*/
-    //wtf ?
+    //
   var i = 0;
+  var j = jsPsych.timelineVariable('expert_reasoning');
+// The Pre-test Trial
+/*
+var PreTest_Trial = {
+  type: 'html-button-response',
+  stimulus: jsPsych.timelineVariable('stimulus'),
+  // stimulus: function(data){
+  //     return "<img src ='img/" + scenarios[i] + ".jpg' width=1000px>"
+  // },
+  button_html: '<button><img src="img/%choice%.jpg" width="260px"></button>',
+  choices: categoryButtons,
+  post_trial_gap: 100,
+  data: jsPsych.timelineVariable('data'),
+  on_finish: function(data) {
+      var lastClick = jsPsych.data.get().last(1).values()[0].button_pressed;
+      data.correct_response = lastClick == data.correct_response;
 
-    // the trial
-    var testTrial = {
+  }
+};
+
+var PreTest_Feedback = {
+  type: 'html-button-response',
+  is_html:true,
+  stimulus: function(){
+      var Laststimuli = jsPsych.timelineVariable('stimulus')[jsPsych.data.get().last(1).values()[0]];
+      // var lastClick = jsPsych.data.get().last(1).values()[0].button_pressed;
+      var lastChoice = categoryButtons[jsPsych.data.get().last(1).values()[0].button_pressed];
+      var display_result = "<img src='img/"+ Laststimuli +".jpg'>" + "<br><br><b>You chose</b> <br><br><img src='img/" + lastChoice + ".jpg' width = 280px>";
+      if (jsPsych.data.get().last(1).values()[0].correct_response) {
+        display_result += "<img src='img/greenTick.png' width = 280px>"
+      } else {
+        display_result += "<img src='img/redCross.png' width = 280px>"
+      }
+      return display_result;
+    },
+  choices: ['Next'],
+  on_finish: function(data){i = i + 1}, //need this to stay until the next Training_Trial, so that scenarios[i] now = scenarios[i+1]
+};
+    var PreTestBlock = {
+      timeline: [PreTest_Trial, PreTest_Feedback],
+      timeline_variables: PreTest_array,
+      repetitions: 10,
+      randomize_order: false,
+    };
+
+    timeline.push(PreTestBlock);
+*/
+
+    // the training trial
+    var Training_Trial = {
       type: 'html-button-response',
       stimulus: jsPsych.timelineVariable('stimulus'),
       // stimulus: function(data){
@@ -429,11 +453,10 @@ var PreTest_array = console.log(short_Pretest_NotCP.concat(short_Pretest_Prob, s
           data.correct_response = lastClick == data.correct_response;
 
       }
-      //on_start:function(data){i=i+1} nor i=i didn't work; we can't put in on_finish
     };
 
     // the feedback
-    var testFeedback = {
+    /*var Training_Feedback = {
       type: 'html-keyboard-response',
       is_html:true,
       stimulus: function(){
@@ -445,28 +468,49 @@ var PreTest_array = console.log(short_Pretest_NotCP.concat(short_Pretest_Prob, s
           } else {
             display_result += "<img src='img/redCross.png' width = 280px>"
           }
-
-          // if participant is in the expert reasoning condition add the image
-          // if(jsPsych.data.get()) {
-          //   display_result += ""
-          // }
-          return display_result;
-          // also, return <imgsrc='img/"+ feedbackHRN[i] + ".jpg'>
-          // you need to create feedbackHRN variable, where the array objects are ["HRN_32_feedback"."HRN_35_feedback"]
-        },
+        return display_result;
+        var display_feedback = "<br>"
+        if (condition == "Expert") {
+          //var laststimuli = Training_Trial[jsPsych.data.get().last(1).jsPsych.timelineVariable()[0].expert_reasoning];
+         display_feedback += "<br><img src= 'img/" + jsPsych.timelineVariable('expert_reasoning') + ".jpg'>"
+        } else {display_feedback += ""}
+          return display_feedback;
+    },
       choices: jsPsych.NO_KEYS,
       trial_duration: 1400,
-      on_finish: function(data){i = i + 1}, //need this to stay until the next testTrial, so that scenarios[i] now = scenarios[i+1]
+      on_finish: function(data){i = i + 1}, //need this to stay until the next Training_Trial, so that scenarios[i] now = scenarios[i+1]
     };
+*/
+var Training_Feedback = {
+  type: 'html-button-response',
+  is_html:true,
+  stimulus: function(){
+      // var lastClick = jsPsych.data.get().last(1).values()[0].button_pressed;
+      var lastChoice = categoryButtons[jsPsych.data.get().last(1).values()[0].button_pressed];
+      var display_result = "<b>You chose</b> <br><br><img src='img/" + lastChoice + ".jpg' width = 280px>" + condition_feedback;
+      if (jsPsych.data.get().last(1).values()[0].correct_response) {
+        display_result += "<img src='img/greenTick.png' width = 280px>"
+      } else {
+        display_result += "<img src='img/redCross.png' width = 280px>"
+      }
+    var condition_feedback = ""
+    if (condition == "Expert") {
+     condition_feedback += "<img src='img/" + jsPsych.timelineVariable('expert_reasoning') + "jpg' width=1000px>"
+   } else {condition_feedback += ""}
+    return  display_result
+  },
+choices: ['Next'],
+  on_finish: function(data){i = i + 1}, //need this to stay until the next Training_Trial, so that scenarios[i] now = scenarios[i+1]
+};
 
-    var testBlock = {
-      timeline: [testTrial, testFeedback],
-      timeline_variables: Shuffled_NotCP_Scenarios,
-      repetitions: 10,
+    var TrainingBlock = {
+      timeline: [Training_Trial, Training_Feedback],
+      timeline_variables: Train_array,
+      repetitions: 25,
       randomize_order: false,
     };
 
-    timeline.push(testBlock);
+    timeline.push(TrainingBlock);
     /* define the instruction block */
     // var experiment_block = {
     // type: 'html-button-response',
