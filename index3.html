@@ -215,6 +215,13 @@ var short_Train_ROSH = Shuffled_ROSH_Scenarios.slice(2,7);
 var short_Train_iROSH = Shuffled_iROSH_Scenarios.slice(2,7);
 var Train_array = short_Train_NotCP.concat(short_Train_Prob, short_Train_HRN,short_Train_ROSH,short_Train_iROSH);
 
+var Posttest_Trained_Array = jsPsych.randomization.sampleWithoutReplacement(short_Train_NotCP, 2).concat(
+  jsPsych.randomization.sampleWithoutReplacement(short_Train_Prob, 2),
+  jsPsych.randomization.sampleWithoutReplacement(short_Train_HRN, 2),
+  jsPsych.randomization.sampleWithoutReplacement(short_Train_ROSH, 2),
+  jsPsych.randomization.sampleWithoutReplacement(short_Train_iROSH, 2)
+);
+
 // Post-Test New Arrary
 var short_Posttest_NotCP = Shuffled_NotCP_Scenarios.slice(2,7);
 var short_Posttest_Prob = Shuffled_Prob_Scenarios.slice(2,7);
