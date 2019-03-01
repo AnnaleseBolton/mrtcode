@@ -402,11 +402,6 @@ var PreTest_Trial = {
   choices: categoryButtons,
   post_trial_gap: 100,
   data: jsPsych.timelineVariable('data'),
-  on_finish: function(data) {
-      var lastClick = jsPsych.data.get().last(1).values()[0].button_pressed;
-      data.correct_response = lastClick == data.correct_response;
-
-  }
 };
 
 var PreTest_Feedback = {
@@ -485,19 +480,23 @@ var Training_Feedback = {
   type: 'html-button-response',
   is_html:true,
   stimulus: function(){
-      // var lastClick = jsPsych.data.get().last(1).values()[0].button_pressed;
-      var lastChoice = categoryButtons[jsPsych.data.get().last(1).values()[0].button_pressed];
-      var display_result = "<b>You chose</b> <br><br><img src='img/" + lastChoice + ".jpg' width = 280px>" + condition_feedback;
-      if (jsPsych.data.get().last(1).values()[0].correct_response) {
-        display_result += "<img src='img/greenTick.png' width = 280px>"
-      } else {
-        display_result += "<img src='img/redCross.png' width = 280px>"
-      }
-    var condition_feedback = ""
-    if (condition == "Expert") {
-     condition_feedback += "<img src='img/" + jsPsych.timelineVariable('expert_reasoning') + "jpg' width=1000px>"
-   } else {condition_feedback += ""}
-    return  display_result
+    var lastTrial        = jsPsych.data.get().last(1).values()[0];
+    var lastClick        = parseInt(lastTrial.button_pressed);
+    var lastChoice       = categoryButtons[lastClick];
+    var correct_response = lastTrial.correct_response;
+
+    var display_result = "<b>You chose</b> <br><br><img src='img/" + lastChoice + ".jpg' width = 280px>";
+
+    if (lastClick === correct_response) {
+      display_result += "<img src='img/greenTick.png' width = 280px>"
+    } else {
+      display_result += "<img src='img/redCross.png' width = 280px>"
+    }
+
+    if (condition === "Expert") {
+      display_result += lastTrial.expert_reasoning;
+    }
+    return  display_result;
   },
 choices: ['Next'],
   on_finish: function(data){i = i + 1}, //need this to stay until the next Training_Trial, so that scenarios[i] now = scenarios[i+1]
