@@ -450,12 +450,14 @@ var Training_instruction_block = {
     var correct_response = lastTrial.correct_response;
   //  var last_stimuli = lastTrial.stimuli;
     //var response_image = lastTrial.response_image;
-    var display_result = lastTrial.stimuli + "<br><br><b>You chose:</b> <img src='img/" + lastChoice + ".jpg' width = 280px>" + "<b>Child protection experts chose:</b>" + lastTrial.response_image;
+    var display_result = lastTrial.stimulus + "<br><br><b>You chose:</b> <img src='img/" + lastChoice + ".jpg' width = 280px>";
     if (lastClick === correct_response) {
       display_result += "<b>This was:</b> <img src='img/greenTick.png' width = 280px>"
     } else {
       display_result += "<b>This was:</b> <img src='img/redCross.png' width = 280px>"
     }
+    display_result = "<b>Child protection experts chose:</b>" + lastTrial.response_image;
+	      
     if (condition === "Expert") {
       display_result += lastTrial.expert_reasoning;
     }
