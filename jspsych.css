@@ -127,7 +127,6 @@
 }
 
 /* added style elements */
-<style>
 .container {
   height: 200px;
   position: relative;
@@ -140,4 +139,7 @@
   -ms-transform: translateY(-50%);
   transform: translateY(-50%);
 }
-</style>
+.half-width {
+  display: inline-block;
+  width: 50%;
+}
