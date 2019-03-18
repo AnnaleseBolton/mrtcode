@@ -11,7 +11,7 @@
     <script src="./js/plugins/jspsych-survey-text.js"></script>
     <script src="./js/plugins/jspsych-html-keyboard-response.js"></script>
 	  <script src="./js/welcome.js"></script>
-    <link href="./js/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+    <link href="jspsych.css" rel="stylesheet" type="text/css"></link>
   </head>
 
   <body>
@@ -587,10 +587,14 @@ var correct_response = lastTrial.correct_response;
 //var response_image = lastTrial.response_image;
 var display_result = "";
 if (lastClick === correct_response) {
-  display_result += "       <img src='img/greenTick.png' width = 280px>       "
+  display_result += "<div><img src='img/greenTick.png' width = 280px></div>"
 } else {
-  display_result += "       <img src='img/redCross.png' width = 280px>        "
+  display_result += "<div><img src='img/redCross.png' width = 280px></div>"
 }
+display_result += "<div>" +
+    "<div class='half-width'><b>You chose:</b><br><img src='img/" + lastChoice + ".jpg' width = 260px></div>" +
+    "<div class='half-width'><b>Child protection experts chose:</b><br>" + category_buttons[correct_response] + "</div>" +
+  "</div>";
 display_result += "<br><br><b>You chose:</b> <img src='img/" + lastChoice + ".jpg' width = 260px>" + " <b>Child protection experts chose:</b>" + lastTrial.response_image;
 //display_result += <div class = "container"><div class="vertical-center">"<br><br><b>You chose:</b> <img src='img/" + lastChoice + ".jpg' width = 260px>" + " <b>Child protection experts chose:</b>" + lastTrial.response_image </div>;//
 if (condition === "Expert") {
