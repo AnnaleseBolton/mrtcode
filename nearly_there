@@ -1,0 +1,789 @@
+<?php
+$post_data = json_decode(file_get_contents('php://input'), true); 
+// the directory "data" must be writable by the server
+$name = "data/".$post_data['filename'].".csv"; 
+$data = $post_data['filedata'];
+// write the file to disk
+file_put_contents($name, $data);
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <system.webServer>
+        <defaultDocument>
+            <files>
+                <remove value="index.php" />
+                <remove value="iisstart.htm" />
+                <remove value="index.htm" />
+                <remove value="Default.asp" />
+                <remove value="Default.htm" />
+            </files>
+        </defaultDocument>
+    </system.webServer>
+</configuration>
+
+<!doctype html>
+<html>
+
+  <head>
+    <title>UNSW CCS</title>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/jspsych.js"></script>
+    <script src="./js/plugins/jspsych-survey-multi-choice.js"></script>
+	  <script src="./js/plugins/jspsych-html-button-response.js"></script>
+    <script src="./js/plugins/jspsych-survey-likert.js"></script>
+    <script src="./js/plugins/jspsych-survey-text.js"></script>
+    <script src="./js/plugins/jspsych-html-keyboard-response.js"></script>
+	  <script src="./js/welcome.js"></script>
+    <link href="./js/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  </head>
+
+  <body>
+	  <div id="welcome"></div>
+  </body>
+
+  <script>
+
+    /* initialise timeline*/
+    var timeline=[];
+    var introloop=[];
+    var turkcode = (Math.floor(Math.random() * 899999) + 100000).toString();
+    // check whether this allows for duplicates
+	  var images = [
+		  './img/test1.jpg',
+		  './img/test2.jpg',
+      './img/RiskResponseTable.jpg',
+      './img/Category_button_NotCP.jpg',
+        './img/Category_button_Prob.jpg',
+          './img/Category_button_HRN.jpg',
+            './img/Category_button_ROSH.jpg',
+              './img/Category_button_iROSH.jpg',
+      './img/greenTick.png',
+        './img/redCross.png',
+      './img/confidence_0.jpg',
+        './img/confidence_1.jpg',
+          './img/confidence_2.jpg',
+            './img/confidence_3.jpg',
+              './img/confidence_4.jpg',
+      './img/NotCP_10b.jpg',
+      './img/NotCP_56d.jpg',
+      './img/NotCP_72c.jpg',
+      './img/NotCP_112d.jpg',
+      './img/NotCP_117b.jpg',
+      './img/NotCP_120e.jpg',
+      './img/NotCP_132d.jpg',
+      './img/NotCP_141d.jpg',
+      './img/NotCP_145c.jpg',
+      './img/NotCP_10b_feedback.jpg',
+      './img/NotCP_56d_feedback.jpg',
+      './img/NotCP_72c_feedback.jpg',
+      './img/NotCP_112d_feedback.jpg',
+      './img/NotCP_117b_feedback.jpg',
+      './img/NotCP_120e_feedback.jpg',
+      './img/NotCP_132d_feedback.jpg',
+      './img/NotCP_141d_feedback.jpg',
+      './img/NotCP_145c_feedback.jpg',
+      './img/Prob_23d.jpg',
+      './img/Prob_41a.jpg',
+      './img/Prob_70e.jpg',
+      './img/Prob_72b.jpg',
+      './img/Prob_75.jpg',
+      './img/Prob_78.jpg',
+      './img/Prob_80a.jpg',
+      './img/Prob_91b.jpg',
+      './img/Prob_106b.jpg',
+      './img/Prob_23d_feedback.jpg',
+      './img/Prob_41a_feedback.jpg',
+      './img/Prob_70e_feedback.jpg',
+      './img/Prob_72b_feedback.jpg',
+      './img/Prob_75_feedback.jpg',
+      './img/Prob_78_feedback.jpg',
+      './img/Prob_80a_feedback.jpg',
+      './img/Prob_91b_feedback.jpg',
+      './img/Prob_106b_feedback.jpg',
+      './img/HRN_23b.jpg',
+      './img/HRN_25.jpg',
+      './img/HRN_32.jpg',
+      './img/HRN_54a.jpg',
+      './img/HRN_59a.jpg',
+      './img/HRN_61b.jpg',
+      './img/HRN_66a.jpg',
+      './img/HRN_96a.jpg',
+      './img/HRN_100.jpg',
+      './img/HRN_23b_feedback.jpg',
+      './img/HRN_25_feedback.jpg',
+      './img/HRN_32_feedback.jpg',
+      './img/HRN_54a_feedback.jpg',
+      './img/HRN_59a_feedback.jpg',
+      './img/HRN_61b_feedback.jpg',
+      './img/HRN_66a_feedback.jpg',
+      './img/HRN_96a_feedback.jpg',
+      './img/HRN_100_feedback.jpg',
+      './img/ROSH_11.jpg',
+      './img/ROSH_30a.jpg',
+      './img/ROSH_42a.jpg',
+      './img/ROSH_48.jpg',
+      './img/ROSH_68b.jpg',
+      './img/ROSH_90a.jpg',
+      './img/ROSH_103a.jpg',
+      './img/ROSH_123.jpg',
+      './img/ROSH_140.jpg',
+      './img/ROSH_11_feedback.jpg',
+      './img/ROSH_30a_feedback.jpg',
+      './img/ROSH_42a_feedback.jpg',
+      './img/ROSH_48_feedback.jpg',
+      './img/ROSH_68b_feedback.jpg',
+      './img/ROSH_90a_feedback.jpg',
+      './img/ROSH_103a_feedback.jpg',
+      './img/ROSH_123_feedback.jpg',
+      './img/ROSH_140_feedback.jpg',
+      './img/iROSH_17b.jpg',
+      './img/iROSH_24b.jpg',
+      './img/iROSH_37e.jpg',
+      './img/iROSH_71a.jpg',
+      './img/iROSH_106a.jpg',
+      './img/iROSH_108a.jpg',
+      './img/iROSH_115.jpg',
+      './img/iROSH_116.jpg',
+      './img/iROSH_128.jpg',
+      './img/iROSH_17b_feedback.jpg',
+      './img/iROSH_24b_feedback.jpg',
+      './img/iROSH_37e_feedback.jpg',
+      './img/iROSH_71a_feedback.jpg',
+      './img/iROSH_106a_feedback.jpg',
+      './img/iROSH_108a_feedback.jpg',
+      './img/iROSH_115_feedback.jpg',
+      './img/iROSH_116_feedback.jpg',
+      './img/iROSH_128_feedback.jpg',
+      './img/NotCP_Attention_check.jpg',
+      './img/HRN_Attention_check.jpg',
+      './img/iROSH_Attention_check.jpg',
+      './img/NotCP_Attention_feedback.jpg',
+      './img/HRN_Attention_feedback.jpg',
+      './img/iROSH_Attention_feedback.jpg',
+      './img/Pilot_Thank_you.jpg',
+	  ];
+
+
+    var NotCP_scenarios = [
+        {stimulus: "<img src ='img/NotCP_10b.jpg' width=1000px>", data: {stimulus: "NotCP_10b", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_10b_feedback.jpg' width=1000px>"}, },
+          {stimulus: "<img src ='img/NotCP_56d.jpg' width=1000px>", data: {stimulus: "NotCP_56d", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_56d_feedback.jpg' width=1000px>"}, },
+          {stimulus: "<img src ='img/NotCP_72c.jpg' width=1000px>", data: {stimulus: "NotCP_72c", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_72c_feedback.jpg' width=1000px>"}, },
+          {stimulus: "<img src ='img/NotCP_112d.jpg' width=1000px>", data: {stimulus: "NotCP_112d", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_112d_feedback.jpg' width=1000px>"}, },
+          {stimulus: "<img src ='img/NotCP_117b.jpg' width=1000px>", data: {stimulus: "NotCP_117b", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_117b_feedback.jpg' width=1000px>"}, },
+          {stimulus: "<img src ='img/NotCP_120e.jpg' width=1000px>", data: {stimulus: "NotCP_120e", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_120e_feedback.jpg' width=1000px>"}, },
+          {stimulus: "<img src ='img/NotCP_132d.jpg' width=1000px>", data: {stimulus: "NotCP_132d", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_132d_feedback.jpg' width=1000px>"}, },
+          {stimulus: "<img src ='img/NotCP_141d.jpg' width=1000px>", data: {stimulus: "NotCP_141d", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_141d_feedback.jpg' width=1000px>"}, },
+          {stimulus: "<img src ='img/NotCP_145c.jpg' width=1000px>", data: {stimulus: "NotCP_145c", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_145c_feedback.jpg' width=1000px>"}, },
+   ];
+
+   var Shuffled_NotCP_Scenarios = jsPsych.randomization.shuffleNoRepeats(NotCP_scenarios);
+
+     var Prob_scenarios = [
+       {stimulus: "<img src ='img/Prob_23d.jpg' width=1000px>", data: {stimulus: "Prob_23d", correct_response: 1, expert_reasoning: "<img src ='img/Prob_23d_feedback.jpg' width=1000px>"}, },
+       {stimulus: "<img src ='img/Prob_41a.jpg' width=1000px>", data: {stimulus: "Prob_41a", correct_response: 1, expert_reasoning: "<img src ='img/Prob_41a_feedback.jpg' width=1000px>"}, },
+       {stimulus: "<img src ='img/Prob_70e.jpg' width=1000px>", data: {stimulus: "Prob_70e", correct_response: 1, expert_reasoning: "<img src ='img/Prob_70e_feedback.jpg' width=1000px>"}, },
+       {stimulus: "<img src ='img/Prob_72b.jpg' width=1000px>", data: {stimulus: "Prob_72b", correct_response: 1, expert_reasoning: "<img src ='img/Prob_72b_feedback.jpg' width=1000px>"}, },
+       {stimulus: "<img src ='img/Prob_75.jpg' width=1000px>", data: {stimulus: "Prob_75", correct_response: 1, expert_reasoning: "<img src ='img/Prob_75_feedback.jpg' width=1000px>"}, },
+       {stimulus: "<img src ='img/Prob_78.jpg' width=1000px>", data: {stimulus: "Prob_78", correct_response: 1, expert_reasoning: "<img src ='img/Prob_78_feedback.jpg' width=1000px>"}, },
+       {stimulus: "<img src ='img/Prob_80a.jpg' width=1000px>", data: {stimulus: "Prob_80a", correct_response: 1, expert_reasoning: "<img src ='img/Prob_80a_feedback.jpg' width=1000px>"}, },
+       {stimulus: "<img src ='img/Prob_91b.jpg' width=1000px>", data: {stimulus: "Prob_91b", correct_response: 1, expert_reasoning: "<img src ='img/Prob_91b_feedback.jpg' width=1000px>"}, },
+       {stimulus: "<img src ='img/Prob_106b.jpg' width=1000px>", data: {stimulus: "Prob_106b", correct_response: 1, expert_reasoning: "<img src ='img/Prob_106b_feedback.jpg' width=1000px>"}, },
+   ];
+
+   var Shuffled_Prob_Scenarios = jsPsych.randomization.shuffleNoRepeats(Prob_scenarios);
+
+     var HRN_scenarios = [
+       {stimulus: "<img src ='img/HRN_23b.jpg' width=1000px>", data: {stimulus: "HRN_23b", correct_response: 2, expert_reasoning: "<img src ='img/HRN_23b_feedback.jpg' width=1000px>"}, },
+        {stimulus: "<img src ='img/HRN_25.jpg' width=1000px>", data: {stimulus: "HRN_25", correct_response: 2, expert_reasoning: "<img src ='img/HRN_25_feedback.jpg' width=1000px>"}, },
+        {stimulus: "<img src ='img/HRN_32.jpg' width=1000px>", data: {stimulus: "HRN_32", correct_response: 2, expert_reasoning: "<img src ='img/HRN_32_feedback.jpg' width=1000px>"}, },
+        {stimulus: "<img src ='img/HRN_54a.jpg' width=1000px>", data: {stimulus: "HRN_54a", correct_response: 2, expert_reasoning: "<img src ='img/HRN_54a_feedback.jpg' width=1000px>"}, },
+        {stimulus: "<img src ='img/HRN_59a.jpg' width=1000px>", data: {stimulus: "HRN_59a", correct_response: 2, expert_reasoning: "<img src ='img/HRN_59a_feedback.jpg' width=1000px>"}, },
+        {stimulus: "<img src ='img/HRN_61b.jpg' width=1000px>", data: {stimulus: "HRN_61b", correct_response: 2, expert_reasoning: "<img src ='img/HRN_61b_feedback.jpg' width=1000px>"}, },
+        {stimulus: "<img src ='img/HRN_66a.jpg' width=1000px>", data: {stimulus: "HRN_66a", correct_response: 2, expert_reasoning: "<img src ='img/HRN_66a_feedback.jpg' width=1000px>"}, },
+        {stimulus: "<img src ='img/HRN_96a.jpg' width=1000px>", data: {stimulus: "HRN_96a", correct_response: 2, expert_reasoning: "<img src ='img/HRN_96a_feedback.jpg' width=1000px>"}, },
+        {stimulus: "<img src ='img/HRN_100.jpg' width=1000px>", data: {stimulus: "HRN_100", correct_response: 2, expert_reasoning: "<img src ='img/HRN_100_feedback.jpg' width=1000px>"}, },
+     ];
+
+   var Shuffled_HRN_Scenarios = jsPsych.randomization.shuffleNoRepeats(HRN_scenarios);
+
+     var ROSH_scenarios = [
+       {stimulus: "<img src ='img/ROSH_11.jpg' width=1000px>", data: {stimulus: "ROSH_11", correct_response: 3, expert_reasoning: "<img src ='img/ROSH_11_feedback.jpg' width=1000px>"}, },
+   {stimulus: "<img src ='img/ROSH_30a.jpg' width=1000px>", data: {stimulus: "ROSH_30a", correct_response: 3, expert_reasoning: "<img src ='img/ROSH_30a_feedback.jpg' width=1000px>"}, },
+   {stimulus: "<img src ='img/ROSH_42a.jpg' width=1000px>", data: {stimulus: "ROSH_42a", correct_response: 3, expert_reasoning: "<img src ='img/ROSH_42a_feedback.jpg' width=1000px>"}, },
+   {stimulus: "<img src ='img/ROSH_48.jpg' width=1000px>", data: {stimulus: "ROSH_48", correct_response: 3,expert_reasoning: "<img src ='img/ROSH_48_feedback.jpg' width=1000px>"}, },
+   {stimulus: "<img src ='img/ROSH_68b.jpg' width=1000px>", data: {stimulus: "ROSH_68b", correct_response: 3, expert_reasoning: "<img src ='img/ROSH_68b_feedback.jpg' width=1000px>"}, },
+   {stimulus: "<img src ='img/ROSH_90a.jpg' width=1000px>", data: {stimulus: "ROSH_90a", correct_response: 3, expert_reasoning: "<img src ='img/ROSH_90a_feedback.jpg' width=1000px>"}, },
+   {stimulus: "<img src ='img/ROSH_103a.jpg' width=1000px>", data: {stimulus: "ROSH_103a", correct_response: 3, expert_reasoning: "<img src ='img/ROSH_103a_feedback.jpg' width=1000px>"}, },
+   {stimulus: "<img src ='img/ROSH_123.jpg' width=1000px>", data: {stimulus: "ROSH_123", correct_response: 3, expert_reasoning: "<img src ='img/ROSH_123_feedback.jpg' width=1000px>"}, },
+   {stimulus: "<img src ='img/ROSH_140.jpg' width=1000px>", data: {stimulus: "ROSH_140", correct_response: 3, expert_reasoning: "<img src ='img/ROSH_140_feedback.jpg' width=1000px>"}, },
+     ];
+   var Shuffled_ROSH_Scenarios = jsPsych.randomization.shuffleNoRepeats(ROSH_scenarios);
+
+   var iROSH_scenarios = [
+     {stimulus: "<img src ='img/iROSH_17b.jpg' width=1000px>", data: {stimulus: "iROSH_17b", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_17b_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/iROSH_24b.jpg' width=1000px>", data: {stimulus: "iROSH_24b", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_24b_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/iROSH_37e.jpg' width=1000px>", data: {stimulus: "iROSH_37e", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_37e_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/iROSH_71a.jpg' width=1000px>", data: {stimulus: "iROSH_71a", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_71a_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/iROSH_106a.jpg' width=1000px>", data: {stimulus: "iROSH_106a", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_106a_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/iROSH_108a.jpg' width=1000px>", data: {stimulus: "iROSH_108a", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_108a_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/iROSH_115.jpg' width=1000px>", data: {stimulus: "iROSH_115", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_115_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/iROSH_116.jpg' width=1000px>", data: {stimulus: "iROSH_116", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_116_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/iROSH_128.jpg' width=1000px>", data: {stimulus: "iROSH_128", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_128_feedback.jpg' width=1000px>"}, },
+    ];
+
+   var Shuffled_iROSH_Scenarios = jsPsych.randomization.shuffleNoRepeats(iROSH_scenarios);
+
+
+   var Attention_check_Scenarios = [
+     {stimulus: "<img src ='img/NotCP_Attention_check.jpg' width=1000px>", data: {stimulus: "NotCP_Attention_check", correct_response: 0, expert_reasoning: "<img src ='img/NotCP_Attention_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/HRN_Attention_check.jpg' width=1000px>", data: {stimulus: "HRN_Attention_check", correct_response: 2, expert_reasoning: "<img src ='img/HRN_Attention_feedback.jpg' width=1000px>"}, },
+     {stimulus: "<img src ='img/iROSH_Attention_check.jpg' width=1000px>", data: {stimulus: "iROSH_Attention_check", correct_response: 4, expert_reasoning: "<img src ='img/iROSH_Attention_feedback.jpg' width=1000px>"}, },
+   ];
+
+var Shuffled_Attention_check_Scenarios = jsPsych.randomization.shuffleNoRepeats(Attention_check_Scenarios);
+
+
+// Pretest array
+
+var short_Pretest_NotCP = Shuffled_NotCP_Scenarios.slice(0,2);
+var short_Pretest_Prob = Shuffled_Prob_Scenarios.slice(0,2);
+var short_Pretest_HRN = Shuffled_HRN_Scenarios.slice(0,2);
+var short_Pretest_ROSH = Shuffled_ROSH_Scenarios.slice(0,2);
+var short_Pretest_iROSH = Shuffled_iROSH_Scenarios.slice(0,2);
+var short_Pretest_attention = Shuffled_Attention_check_Scenarios.slice(0,1);
+
+short_Pretest_attention.forEach(function(scenario) {
+  scenario.data.status = 'Attention';
+});
+
+var PreTest_array = short_Pretest_NotCP.concat(short_Pretest_Prob, short_Pretest_HRN,short_Pretest_ROSH,short_Pretest_iROSH, short_Pretest_attention);
+
+// Training Arrary
+var short_Train_NotCP = Shuffled_NotCP_Scenarios.slice(2,7);
+var short_Train_Prob = Shuffled_Prob_Scenarios.slice(2,7);
+var short_Train_HRN = Shuffled_HRN_Scenarios.slice(2,7);
+var short_Train_ROSH = Shuffled_ROSH_Scenarios.slice(2,7);
+var short_Train_iROSH = Shuffled_iROSH_Scenarios.slice(2,7);
+var short_Train_attention = Shuffled_Attention_check_Scenarios.slice(1,2);
+
+short_Train_attention.forEach(function(scenario) {
+  scenario.data.status = 'Attention';
+});
+
+var Train_array = short_Train_NotCP.concat(short_Train_Prob, short_Train_HRN,short_Train_ROSH,short_Train_iROSH, short_Train_attention);
+
+
+
+// Post-Test New Arrary
+var short_Posttest_NotCP = Shuffled_NotCP_Scenarios.slice(7,9);
+var short_Posttest_Prob = Shuffled_Prob_Scenarios.slice(7,9);
+var short_Posttest_HRN = Shuffled_HRN_Scenarios.slice(7,9);
+var short_Posttest_ROSH = Shuffled_ROSH_Scenarios.slice(7,9);
+var short_Posttest_iROSH = Shuffled_iROSH_Scenarios.slice(7,9);
+var Posttest_New_array = short_Posttest_NotCP.concat(short_Posttest_Prob, short_Posttest_HRN,short_Posttest_ROSH,short_Posttest_iROSH);
+
+
+
+// My attempt at Post-test Trained Arrary
+var Posttest_Trained_Array = jsPsych.randomization.sampleWithoutReplacement(short_Train_NotCP, 2).concat(
+  jsPsych.randomization.sampleWithoutReplacement(short_Train_Prob, 2),
+  jsPsych.randomization.sampleWithoutReplacement(short_Train_HRN, 2),
+  jsPsych.randomization.sampleWithoutReplacement(short_Train_ROSH, 2),
+  jsPsych.randomization.sampleWithoutReplacement(short_Train_iROSH, 2)
+);
+
+// Attention check Arrary
+
+var short_Posttest_attention = Shuffled_Attention_check_Scenarios.slice(1,2);
+
+// Creat a data label so that the Trained, New and Attention Checks can easily be identified
+
+Posttest_Trained_Array.forEach(function(scenario) {
+  scenario.data.status = 'trained';
+});
+Posttest_New_array.forEach(function(scenario) {
+  scenario.data.status = 'new';
+});
+short_Posttest_attention.forEach(function(scenario) {
+  scenario.data.status = 'Attention';
+});
+
+// Post-Test combined Arrary
+var PostTest_array = Posttest_Trained_Array.concat(Posttest_New_array, short_Posttest_attention);
+
+// Assign participant id's and condition
+var pid = Math.floor(Math.random() * 100000);
+var condition = ['Basic', 'Expert'];
+var condition = jsPsych.randomization.sampleWithoutReplacement(condition, 1)[0]; // not sure what this does
+jsPsych.data.addProperties({
+        condition: condition
+      });
+
+
+// Other useful variables
+
+var category_buttons = ["<img src= 'img/Category_button_NotCP.jpg' width = 260px>","<img src= 'img/Category_button_Prob.jpg' width = 260px>","<img src= 'img/Category_button_HRN.jpg' width = 260px>","<img src= 'img/Category_button_ROSH.jpg' width = 260px>","<img src= 'img/Category_button_iROSH.jpg' width = 260px>"];
+var confidence_buttons = ["<img src= 'img/confidence_0.jpg' width = 260px>", "<img src= 'img/confidence_1.jpg' width = 260px>", "<img src= 'img/confidence_2.jpg' width = 260px>", "<img src= 'img/confidence_3.jpg' width = 260px>", "<img src= 'img/confidence_4.jpg' width = 260px>"];
+var accuracy_prediction_buttons = ["<img src= 'img/accuracy_rating_0.jpg' width = 160px>", "<img src= 'img/accuracy_rating_1.jpg' width = 160px>", "<img src= 'img/accuracy_rating_2.jpg' width = 160px>", "<img src= 'img/accuracy_rating_3.jpg' width = 160px>", "<img src= 'img/accuracy_rating_4.jpg' width = 160px>", "<img src= 'img/accuracy_rating_5.jpg' width = 160px>", "<img src= 'img/accuracy_rating_6.jpg' width = 160px>", "<img src= 'img/accuracy_rating_7.jpg' width = 160px>", "<img src= 'img/accuracy_rating_8.jpg' width = 160px>", "<img src= 'img/accuracy_rating_9.jpg' width = 160px>", "<img src= 'img/accuracy_rating_10.jpg' width = 160px>"];
+var Pre_accuracy_prediction_buttons = ["<img src= 'img/accuracy_rating_0.jpg' width = 160px>", "<img src= 'img/accuracy_rating_1.jpg' width = 160px>", "<img src= 'img/accuracy_rating_2.jpg' width = 160px>", "<img src= 'img/accuracy_rating_3.jpg' width = 160px>", "<img src= 'img/accuracy_rating_4.jpg' width = 160px>", "<img src= 'img/accuracy_rating_5.jpg' width = 160px>", "<img src= 'img/accuracy_rating_6.jpg' width = 160px>", "<img src= 'img/accuracy_rating_7.jpg' width = 160px>", "<img src= 'img/accuracy_rating_8.jpg' width = 160px>", "<img src= 'img/accuracy_rating_9.jpg' width = 160px>", "<img src= 'img/accuracy_rating_10.jpg' width = 160px>", "<img src= 'img/accuracy_rating_11.jpg' width = 160px>"];
+
+// for stimulus pairs
+var i = 0;
+// for progress bar
+var j = 0;
+
+
+
+    /* function to start the jsPsych experiment */
+    function startExperiment(){
+
+    /*  function download_data(data) {
+        var csvString = jsPsych.data.dataAsCSV();
+        var a = document.createElement('a');
+        a.href = 'data:attachment/csv,' + csvString;
+        a.target = '_blank';
+        a.download = 'ExperimentData.csv';
+
+        document.body.appendChild(a);
+        a.click();
+      }
+      */
+      jsPsych.data.addProperties({
+  		turkcode: turkcode,
+  		pid: pid
+  	 });
+
+      // record the turkcode in the jsPsych data - DONT NEED TURK CODE GET RID OF ALL CODE USING THIS
+      jsPsych.data.addProperties({
+        turkcode: turkcode
+      });
+
+      jsPsych.init({
+        timeline: timeline,
+        show_progress_bar: true,
+        auto_update_progress_bar: false,
+        preload_images: images,
+      /*  on_finish: function() {
+          jsPsych.data.get().localSave('csv','test.csv')
+        } */
+        on_trial_finish: function(data){saveData(filename, jsPsych.data.get().csv())}  // uncomment to locally save data file as csv
+        //on_finish: function() {
+        //  endExperiment(jsPsych.data.get().csv(), function() {document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px"><p><br><br><br>You\'re all done!<br><br><br> Thanks for your time!</p></div></div>') }
+      });
+    };
+
+
+    /* save and finish */
+    function endExperiment(dataset,callback) {
+      $.post('submit',{"content": dataset}); // uncomment to post data
+      console.log(dataset) // comment out to avoid console log
+      setTimeout(callback,1000)
+    }
+
+var filename = "MRTP_pilot" + turkcode;
+function saveData(name, data){
+  	var xhr = new XMLHttpRequest();
+  	xhr.open('POST', 'save_data.php'); // 'write_data.php' is the path to the php file described above.
+  	xhr.setRequestHeader('Content-Type', 'application/json');
+  	xhr.send(JSON.stringify({filename: filename, filedata: data})); //specify a variable "filename"
+  };
+
+
+    /* change the display property of a set of objects - I DONT KNOW WHAT THIS PART OF THE CODE DOES*/
+    function setDisplay(theClass, theValue) {
+      var i, classElements = document.getElementsByClassName(theClass);
+      for (i = 0; i < classElements.length; i = i + 1) {
+        classElements[i].style.display = theValue;
+      }
+    }
+
+    /* A grossly typical way to run the instructions is to go through a series
+    of small slides (implemeted as trials in jsPsych) with a minimum reading time
+    enforced for each slide, such that the "continue" button doesn't appear until
+    the time elapses. At the end of the instructions, there is a short quiz, and if
+    the participant gets them wrong they are sent back to the beginning */
+
+    /* define the instruction block */
+
+    var instruction_block = {
+      type: 'html-button-response',
+      timing_post_trial: 0,
+      choices: ['Next'],
+      on_trial_start: function() { setTimeout(function() {setDisplay("jspsych-btn","")}, 1000)},
+      is_html: true,
+      timeline: [
+        {stimulus: '<br><br><b>Child Protection Response Options in New South Wales </b><br><br>Your goal in this experiment is to accurately categorize child protection scenarios in terms of the level of risk and response required. <br><br>The definition for each risk/response category is presented in the table below. Each column represents a risk/response category.<br><br> Please read each category carefully. <br><br> On the next page you will be tested on your category knowledge. If you get those questions wrong, you will be re-directed back to this page. <br><br><br><br><img src="img/RiskResponseTable.jpg" width="1400px"></img><br><br>'},
+            ]
+    };
+introloop.push(instruction_block); // <- the setup block gets pushed to a "loop node"
+
+
+    /* define instruction check block */
+
+    var instructioncorrect = false;
+    var instruction_check = {
+        type: "survey-multi-choice",
+        preamble: ["<p align='center'><b>Check your knowledge before you begin!</b></p>"],
+        questions: [
+          {prompt: "<b>Question 1</b>: True or false? All situations where you suspect a child/young person is at risk of harm needs to be reported to the FaCS Child Protection Helpline.", options: [" True"," False"], required: true},
+          {prompt: "<b>Question 2</b>: Which statement does not fit with the Suspected Risk of Significant Harm (ROSH) category?", options: [" The child/young person will be exposed to their abuse perpetrator within the next 24 hours", " The caregiver is behaving in a way that is likely to cause significant harm to a child/young person.", " The household issue(s) are of the severity that it is questionable as to whether the child/young person should remain under their caregivers&#8217 care."], required: true},
+          {prompt: "<b>Question 3</b>: Australian child protection legislation covers all young people under the age of...", options: [" 16 years"," 18 years", " 21 years"], required: true}
+        ],
+        on_finish: function(data) {
+          if( data.responses == '{"Q0":" False","Q1":" The child/young person will be exposed to their abuse perpetrator within the next 24 hours","Q2":" 18 years"}') {
+            action = false;
+            instructioncorrect = true;
+          }
+        }
+    }
+introloop.push(instruction_check)
+
+    /* define a page for the incorrect response */
+
+    var showsplash = true;
+    var splash_screen = {
+      type: 'html-button-response',
+      timing_post_trial: 0,
+      choices: ['Click here to read the instructions again'],
+      on_trial_start: function() {setTimeout(function() {setDisplay("jspsych-btn","")}, 500)},
+      is_html: true,
+      stimulus: 'Unfortunately, at least one of your answers was incorrect.<br><br>'
+    }
+
+    /* ...but push it to a conditional node that only shows it if the response was wrong */
+
+    var conditional_splash = {
+      timeline: [splash_screen],
+      conditional_function: function(data) {
+        return !instructioncorrect // skip if correct
+      }
+    }
+introloop.push(conditional_splash)
+
+    /* finally, add the entirety of this introductory section to a loop node ... */
+
+    var loop_node = {
+      timeline: introloop,
+      loop_function: function(data) {
+        return !instructioncorrect // stop looping if correct
+      }
+    }
+timeline.push(loop_node) // ... and add that to the timeline
+
+    /* success trial */
+
+    var successtrial = {
+      type: 'html-button-response',
+      timing_post_trial: 0,
+      choices: ['Next'],
+      on_trial_start: function() { setTimeout(function() {setDisplay("jspsych-btn","")}, 500)},
+      is_html: true,
+      stimulus: 'Well done!<br><br>'
+    };
+
+timeline.push(successtrial);
+
+
+  var PreTest_instruction_block = {
+    type: 'html-button-response',
+    timing_post_trial: 0,
+    choices: ['Next'],
+    on_trial_start: function() { setTimeout(function() {setDisplay("jspsych-btn","")}, 1000)},
+    is_html: true,
+    stimulus: '<br><br><b>You are now entering the PRE-TEST PHASE</b><br><br>On the following pages you will be presented with 11 scenarios.<br><br> Beneath each scenario is a list of the different risk/response categories.<br><br> For each scenario click on the risk/response category that you feel is most appropritate for the scenario. <br><br> Try to be as accurate and quick as you can be.<br><br> ',
+    };
+timeline.push(PreTest_instruction_block);
+
+
+// PreTest_Trial
+var PreTest_trial = {
+      type: 'survey-multi-choice',
+      data: jsPsych.timelineVariable('data'),
+      preamble: '<b><r>After reading the scenario, choose (by clicking on) the Risk/Response category you think is most appropriate</b></r>',
+      questions: [
+        {prompt: jsPsych.timelineVariable('stimulus'),
+         options: category_buttons, required:true,horizontal: true},
+        {prompt: "How confident are you that your choice is correct?",
+         options: confidence_buttons, required: true, horizontal: true}],
+         on_finish: function(data) {
+           window.scrollTo(0,0);
+           var lastTrial        = jsPsych.data.get().last(1).values()[0];
+           var responses        = JSON.parse(lastTrial.responses);
+           var lastCategory     = responses.Q0;
+           data.category_choice = category_buttons.indexOf(lastCategory);
+           var correct_response = lastTrial.correct_response;
+           data.correct_choice = (data.category_choice === correct_response);
+           data.rt = lastTrial.rt;
+           var lastConfidence   = responses.Q1;
+           data.confidence_choice = confidence_buttons.indexOf(lastConfidence);
+           i = i + 1;
+           data.trialtype = 'pretest';
+           j = j + 1/58;
+           jsPsych.setProgressBar(j)
+         },
+    };
+
+    var PreTestBlock = {
+      timeline: [PreTest_trial],
+      timeline_variables: PreTest_array,
+      repetitions: 0,
+      randomize_order: true,
+    };
+
+timeline.push(PreTestBlock);
+
+//PreTest accuracy judgements
+
+var PreTest_accuracy_judgement = {
+  type: 'survey-multi-choice',
+  questions: [{prompt: "Of the scenarios you just categorized, how many do you think you got <r>CORRECT?</b></r> (i.e. you chose the same category that our team of Child Protection experts chose)<br>", options: Pre_accuracy_prediction_buttons, required: true, horizontal: true,}],
+  on_finish: function(data) {
+    window.scrollTo(0,0);
+    var lastTrial        = jsPsych.data.get().last(1).values()[0];
+    var responses        = JSON.parse(lastTrial.responses);
+    var lastJudgement     = responses.Q0;
+    data.accuracy_judgement = Pre_accuracy_prediction_buttons.indexOf(lastJudgement);
+    },
+};
+
+timeline.push(PreTest_accuracy_judgement)
+
+
+// Accuracy feedback
+
+var debrief_block = {
+  type: 'html-button-response',
+  choices: ['Next'],
+  stimulus: function() {
+
+    var trials = jsPsych.data.get().filter({trialtype: 'pretest'});
+    var correct_trials = trials.filter({correct_choice: true});;
+    var AvRT = Math.round(trials.select('rt').mean());
+
+    return "<p><b><r>You got "+correct_trials.count()+"  out of "+trials.count()+" scenarios correct.</p></b></r>"+
+    "<p>(Your average response time was "+(AvRT/60000).toFixed(2)+" minutes per scenario)</p>";
+  }
+};
+timeline.push(debrief_block);
+
+
+//TRAINING PHASE
+
+// Training instructions
+    var Training_instruction_block = {
+      type: 'html-button-response',
+      timing_post_trial: 0,
+      choices: ['Next'],
+      on_trial_start: function() { setTimeout(function() {setDisplay("jspsych-btn","")}, 1000)},
+      is_html: true,
+      stimulus: '<br><br><b>You are now entering the TRAINING PHASE</b><br><br>On the following pages you will be presented with 26 scenarios. <br><br> As before, your task is to choose the risk/response category that you feel is most appropritate. <br><br> During this phase, you will receive feedback comparing your response to the responses of child protection experts. <br><br>Try to be as accurate and quick as you can be.<br><br> ',
+      };
+      timeline.push(Training_instruction_block);
+
+//Training: Stimulus and choice
+  var Training_Trial = {
+        type: 'survey-multi-choice',
+        data: jsPsych.timelineVariable('data'),
+        preamble: '<b><r>After reading the scenario, choose (by clicking on) the Risk/Response category you think is most appropriate</b></r>',
+        questions: [
+          {prompt: jsPsych.timelineVariable('stimulus'),
+           options: category_buttons, required:true,horizontal: true},
+          {prompt: "How confident are you which this choice?",
+           options: confidence_buttons, required: true, horizontal: true}],
+           on_finish: function(data) {
+             window.scrollTo(0,0);
+             var lastTrial        = jsPsych.data.get().last(1).values()[0];
+             var responses        = JSON.parse(lastTrial.responses);
+             var lastCategory     = responses.Q0;
+             data.category_choice = category_buttons.indexOf(lastCategory);
+             var correct_response = lastTrial.correct_response;
+             data.correct_choice = (data.category_choice === correct_response);
+             var lastConfidence   = responses.Q1;
+             data.confidence_choice = confidence_buttons.indexOf(lastConfidence);
+             i = i + 1;
+             data.trialtype = 'training';
+             jsPsych.setProgressBar(j)
+           },
+      };
+
+
+      // Training feedback
+      var Training_Feedback = {
+        type: 'html-button-response',
+        is_html:true,
+        stimulus: function(){
+      var lastTrial        = jsPsych.data.get().last(1).values()[0];
+      var lastCategory     = lastTrial.category_choice;
+      var correct_response = lastTrial.correct_response;
+      //  var last_stimuli = lastTrial.stimuli;
+      //var response_image = lastTrial.response_image;
+      var display_result = "";
+      if (lastCategory === correct_response) {
+          display_result += "<div><div class = style=text-align:center><img src='img/greenTick.png' width = 280px></div><br><br>"
+      } else {
+        display_result += "<div><div class = style=text-align:center><img src='img/redCross.png' width = 280px></div><br><br>"
+      }
+      display_result += "<br><div>" +
+          "<div class='half-width'><b>You chose:</b><br>" + category_buttons[lastCategory] + "</div>" +
+          "<div class='half-width'><b>Child protection experts chose:</b><br>" + category_buttons[correct_response] + "</div>" +
+        "</div><br>";
+      if (condition === "Expert") {
+        display_result += "<br><br>" + lastTrial.expert_reasoning + "<br><br>";
+      }
+      //display_result += "<br><br><br><br> <b><r> OPTIONAL: </r> If you want to check back over the scenario, here it is again. To move to the next scenario, scroll down and click the 'Next' button </b><br><br>";
+    //  display_result += "<img src ='img/" + lastTrial.stimulus + ".jpg' width=1000px>";
+      return  display_result;
+      },
+        choices: ['Next'],
+        on_finish: function(data){
+          window.scrollTo(0,0);
+          i = i + 1;
+          data.trialtype = 'training';
+          j = j + 1/58;
+          jsPsych.setProgressBar(j)
+        }, //need this to stay until the next Training_Trial, so that scenarios[i] now = scenarios[i+1]
+      };
+
+          var TrainingBlock = {
+            timeline: [Training_Trial, Training_Feedback],
+            timeline_variables: Train_array,
+            repetitions: 0,
+            randomize_order: true,
+          };
+
+    timeline.push(TrainingBlock);
+
+          // Accuracy feedback
+
+      var Training_summary = {
+            type: 'html-button-response',
+            choices: ['Next'],
+            stimulus: function() {
+
+              var trials = jsPsych.data.get().filter({trialtype: 'training'});
+              var correct_trials = trials.filter({correct_choice: true});;
+              var AvRT = Math.round(trials.select('rt').mean());
+
+              return "<p>During the Training phase <b><r>you got "+correct_trials.count()+"  out of "+trials.count()/2+" scenarios correct.</p></b></r>"+
+              "<p>(Your average response time was "+(AvRT/60000).toFixed(2)+" minutes per scenario)</p>";
+            }
+          };
+  timeline.push(Training_summary);
+
+// POST TEST PHASE
+
+  //Post-Test instructions
+              var PostTest_instruction_block = {
+                type: 'html-button-response',
+                timing_post_trial: 0,
+                choices: ['Next'],
+                on_trial_start: function() { setTimeout(function() {setDisplay("jspsych-btn","")}, 1000)},
+                is_html: true,
+                stimulus: '<br><br><b>You are now entering the POST-TEST PHASE</b><br><br>On the following pages you will be presented with 21 scenarios. <br><br> As before, your task is to choose the risk/response category that you feel is most appropritate. <br><br> You will NOT receive any feedback. <br><br>Try to be as accurate and quick as you can be.<br><br> ',
+                };
+
+              timeline.push(PostTest_instruction_block);
+// Post-test stimuls and choice
+              var PostTest_Trial = {
+                    type: 'survey-multi-choice',
+                    data: jsPsych.timelineVariable('data'),
+                    preamble: '<b><r>After reading the scenario, choose (by clicking) the Risk/Response category you think is most appropriate</b></r>',
+                    questions: [
+                      {prompt: jsPsych.timelineVariable('stimulus'),
+                       options: category_buttons, required:true,horizontal: true},
+                      {prompt: "How confident are you that your choice is correct?",
+                       options: confidence_buttons, required: true, horizontal: true}],
+                       on_finish: function(data) {
+                         window.scrollTo(0,0);
+                         var lastTrial        = jsPsych.data.get().last(1).values()[0];
+                         var responses        = JSON.parse(lastTrial.responses);
+                         var lastCategory     = responses.Q0;
+                         data.category_choice = category_buttons.indexOf(lastCategory);
+                         var correct_response = lastTrial.correct_response;
+                          data.correct_choice = (data.category_choice === correct_response);
+                         var lastConfidence   = responses.Q1;
+                         data.confidence_choice = confidence_buttons.indexOf(lastConfidence);
+                         i = i + 1;
+                         data.trialtype = 'posttest';
+                         j = j + 1/58;
+                         jsPsych.setProgressBar(j)
+                       },
+                  };
+
+                  var PostTestBlock = {
+                    timeline: [PostTest_Trial],
+                    timeline_variables: PostTest_array,
+                    repetitions: 0,
+                    randomize_order: true,
+                  };
+
+    timeline.push(PostTestBlock);
+
+
+    //PreTest accuracy judgements
+
+  var PostTest_accuracy_judgement = {
+      type: 'survey-multi-choice',
+      questions: [
+        {prompt: "10 of the scenarios you just categorized were repeated from the Training Phase. Of these 10 previously seen scenarios, how many do you think you categorized correctly during the Post-test?<br>", options: accuracy_prediction_buttons, required: true, horizontal: true,},
+        {prompt: "10 of scenarios that you just categorized during the Post-test Phase were new. Of these 10 new scenarios, how many do you think you categorized correctly during the Post-test?<br>", options: accuracy_prediction_buttons, required: true, horizontal: true,}],
+        on_finish: function(data) {
+          window.scrollTo(0,0);
+          var lastTrial        = jsPsych.data.get().last(1).values()[0];
+          var responses        = JSON.parse(lastTrial.responses);
+          var lastJudgementTrained     = responses.Q0;
+          data.postT_AccJudgment_Trained = accuracy_prediction_buttons.indexOf(lastJudgementTrained);
+          var lastJudgementNew   = responses.Q1;
+          data.postT_AccJudgment_New = accuracy_prediction_buttons.indexOf(lastJudgementNew);
+        },
+      };
+
+timeline.push(PostTest_accuracy_judgement)
+
+// Accuracy feedback
+
+var PostTest_Debrief = {
+  type: 'html-button-response',
+  choices: ['Next'],
+  stimulus: function() {
+
+    var trials = jsPsych.data.get().filter({trialtype: 'posttest'});
+    var trained = trials.filter({status: 'trained'});
+    var correct_trials_trained = trained.filter({correct_choice: true});
+    var New = trials.filter({status: 'new'});
+    var correct_trials_New = New.filter({correct_choice: true});
+    var AvRT = Math.round(trials.select('rt').mean()).toFixed(2);
+
+    return "<p><b><r>For the scenarios you previously saw during the training phase, you got "+correct_trials_trained.count()+"  out of "+trained.count()+" scenarios correct.</p></b></r>"+
+    "<p><b><r>For the new scenarios, you got "+correct_trials_New.count()+"  out of "+New.count()+" scenarios correct.</p></b></r>"+
+    "<p>(Your average response time was "+(AvRT/60000).toFixed(2)+" minutes per scenario)</p>";
+  }
+};
+timeline.push(PostTest_Debrief);
+
+//Pilot questionairre
+
+  var PilotQuestionnaire = {
+      type: 'survey-text',
+      preamble: ["<img src ='img/Pilot_Thank_you.jpg' width=600px><br><br>"],
+      questions: [
+          {prompt: "Please rate how worthwhile you think it is for research to investigate how we can best train mandatory reporters (0= Not at all worthwhile, 2 = slightly worthwhile, 4 = moderately worthwhile, 6 = reasonably worthwhile, 8 = very worthwhile)"},
+          {prompt: "Tell me about your thoughts and experience of doing this training experiment:"},
+          {prompt: "Did the program run smoothly?"},
+          {prompt: "Were all the instructions/questions clear?"},
+          {prompt: "Was there anything particularly annoying/frustrating/confusing?"},
+          {prompt: "Comment on the number of scenarios used (not enough, a good amount, too many, etc.)"},
+          {prompt: "Comment on the time (it took too long, was just right, not long enough, etc.)"},
+          {prompt: "Is there anything you would change or do differently?"},
+          {prompt: "Any other comments?"}
+            ]
+            };
+
+  timeline.push(PilotQuestionnaire);
+
+
+    /* start by running the "welcome" */
+    welcome.run();
+
+  </script>
+</html>
